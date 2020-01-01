@@ -176,9 +176,16 @@ android {
 
         }
     }
+  // added customly
+   packagingOptions {
+     pickFirst '**/libjsc.so'
+  }
 }
 
 dependencies {
+    implementation project(':react-native-document-picker')
+    implementation project(':react-native-image-picker')
+    implementation project(':react-native-svg')
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.facebook.react:react-native:+"  // From node_modules
 

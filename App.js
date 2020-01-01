@@ -15,7 +15,8 @@ import {
   Text,
   StatusBar,
 } from 'react-native';
-
+import Client from './components/screens/apollo_config/config';
+import {ApolloProvider} from 'react-apollo';
 import {
   Header,
   LearnMoreLinks,
@@ -23,52 +24,21 @@ import {
   DebugInstructions,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+import Routes from './components/navigation/index';
+import FlashMessage from 'react-native-flash-message';
+import {Provider} from 'react-redux';
+import {store} from './components/redux/store';
 
-const App: () => React$Node = () => {
+const App = () => {
   return (
-    <>
-      <StatusBar barStyle="dark-content" />
-      <SafeAreaView>
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          style={styles.scrollView}>
-          <Header />
-          {global.HermesInternal == null ? null : (
-            <View style={styles.engine}>
-              <Text style={styles.footer}>Engine: Hermes</Text>
-            </View>
-          )}
-          <View style={styles.body}>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Step One</Text>
-              <Text style={styles.sectionDescription}>
-                Edit <Text style={styles.highlight}>App.js</Text> to change this
-                screen and then come back to see your edits.
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>See Your Changes</Text>
-              <Text style={styles.sectionDescription}>
-                <ReloadInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Debug</Text>
-              <Text style={styles.sectionDescription}>
-                <DebugInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Learn More</Text>
-              <Text style={styles.sectionDescription}>
-                Read the docs to discover what to do next:
-              </Text>
-            </View>
-            <LearnMoreLinks />
-          </View>
-        </ScrollView>
-      </SafeAreaView>
-    </>
+    <View style={{flex: 1}}>
+      <ApolloProvider client={Client}>
+        <Provider store={store}>
+          <Routes />
+        </Provider>
+        <FlashMessage position="top" duration={3000} />
+      </ApolloProvider>
+    </View>
   );
 };
 
