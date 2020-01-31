@@ -49,21 +49,24 @@ const SplashScreen = props => {
       <Content
         style={{backgroundColor: 'transparent'}}
         contentContainerStyle={{alignItems: 'center'}}>
-        <ImageBackground
-          source={Splashscreenbackground}
+        <View
           style={{
             width: '100%',
             height: ScreenHeight - 24,
             alignItems: 'center',
-          }}
-          resizeMode={'cover'}>
+          }}>
           <View
             style={{
               alignSelf: 'center',
               justifyContent: 'space-between',
               width: '100%',
             }}>
-            <View style={{alignItems: 'center', height: 350, justifyContent:'center'}}>
+            <View
+              style={{
+                alignItems: 'center',
+                height: 350,
+                justifyContent: 'center',
+              }}>
               <Image source={Logo} style={{height: 220, width: 180}} />
             </View>
             <View
@@ -85,10 +88,10 @@ const SplashScreen = props => {
                   AsyncStorage.setItem('role', 'b');
                 }}>
                 <Text style={{textAlign: 'center', color: 'white'}}>
-                  Buyer_Login
+                  Buyer Login
                 </Text>
               </TouchableOpacity>
-              
+
               <TouchableOpacity
                 style={{
                   width: '90%',
@@ -102,12 +105,12 @@ const SplashScreen = props => {
                   AsyncStorage.setItem('role', 's');
                 }}>
                 <Text style={{textAlign: 'center', color: 'white'}}>
-                  Seller_Login
+                  Seller Login
                 </Text>
               </TouchableOpacity>
             </View>
           </View>
-        </ImageBackground>
+        </View>
       </Content>
     </Container>
   );

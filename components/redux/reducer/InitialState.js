@@ -6,7 +6,9 @@ const InitialState = {
     category: '',
     location: '',
   },
-  selectedItemId:0
+  selectedItemId: 0,
+  sparepartslist: [],
+  loginModal: false,
 };
 
 export default InitialState;

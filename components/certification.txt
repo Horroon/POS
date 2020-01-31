@@ -1,0 +1,26 @@
+Alias name: androiddebugkey
+Creation date: Dec 4, 2019
+Entry type: PrivateKeyEntry
+Certificate chain length: 1
+Certificate[1]:
+Owner: C=US, O=Android, CN=Android Debug
+Issuer: C=US, O=Android, CN=Android Debug
+Serial number: 1
+Valid from: Wed Dec 04 12:06:46 PKT 2019 until: Fri Nov 26 12:06:46 PKT 2049
+Certificate fingerprints:
+         MD5:  50:6A:75:73:20:26:38:AA:36:D5:2D:0A:50:42:16:E5
+         SHA1: 5A:43:C7:89:5E:8B:12:D0:21:8F:54:54:24:27:CA:45:83:1A:17:20
+         SHA256: 93:4C:E0:E1:F9:22:8B:DC:7F:C6:49:A2:30:36:C6:98:54:8C:FB:37:A4:4A:1F:D9:1C:EA:A7:35:20:0E:7C:DB
+Signature algorithm name: SHA1withRSA
+Subject Public Key Algorithm: 2048-bit RSA key
+Version: 1
+
+Warning:
+The JKS keystore uses a proprietary format. It is recommended to migrate to PKCS12 which is an industry standard format using "keytool -importkeystore -srckeystore C:\Users\Haroon\.android\debug.keystore -destkeystore C:\Users\Haroon\.android\debug.keystore -deststoretype pkcs12".
+
+      
+keytool -exportcert -alias androiddebugkey -keystore C:\Users\Haroon\.android\debug.keystore | C:\Users\sslfile\bin\openssl sha1 -binary | C:\Users\sslfile\bin\openssl base64
+
+password for hash key "haroon@123"
+
+hash key = "ga0RGNYHvNM5d0SLGQfpQWAPGJ8="

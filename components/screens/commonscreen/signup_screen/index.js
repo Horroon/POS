@@ -19,6 +19,8 @@ import gql from 'graphql-tag';
 import Upload_Image from '../../../../assests/upload_image.png';
 import ImagePicker from 'react-native-image-picker';
 import DocumentPicker from 'react-native-document-picker';
+import {ReactNativeFile} from 'apollo-upload-client';
+//import ImagePicker from 'react-native-image-picker';
 
 const options = {
   title: 'Select Profile Picture',
@@ -45,6 +47,7 @@ export default class SignUpComponent extends Component {
       city: '',
       country: '',
       profile: '',
+      showImage: '',
     };
   }
 
@@ -61,6 +64,7 @@ export default class SignUpComponent extends Component {
       this.state.profile
     ) {
       if (this.state.password == this.state.repassword) {
+        console.log('file become ', this.state.profile);
         try {
           const role = await AsyncStorage.getItem('role');
           this.setState({loader: true});
@@ -76,7 +80,7 @@ export default class SignUpComponent extends Component {
                 $city: String!
                 $country: String!
                 $role: String!
-                $profile: String!
+                $profile: Upload!
               ) {
                 signup(
                   fname: $fname
@@ -90,8 +94,7 @@ export default class SignUpComponent extends Component {
                   role: $role
                   profile: $profile
                 ) {
-                  fname
-                  role
+                  AuthToken
                 }
               }
             `,
@@ -117,6 +120,7 @@ export default class SignUpComponent extends Component {
           }
 
           if (data) {
+            AsyncStorage.setItem('token', data.signup.AuthToken);
             showMessage({
               message: 'Successfully Created',
               type: 'success',
@@ -179,8 +183,14 @@ export default class SignUpComponent extends Component {
         // const source = { uri: 'data:image/jpeg;base64,' + response.data };
 
         console.log('file is ', response);
+        const file = new ReactNativeFile({
+          uri: response.uri,
+          name: response.fileName,
+          type: response.type ? response.type : 'image/png',
+        });
         this.setState({
-          profile: 'data:image/jpeg;base64,' + response.data,
+          profile: file,
+          showImage: 'data:image/jpeg;base64,' + response.data,
         });
       }
     });
@@ -208,7 +218,7 @@ export default class SignUpComponent extends Component {
   render() {
     const {navigate} = this.props.navigation;
     let Image_URl =
-      this.state.profile === '' ? Upload_Image : {uri: this.state.profile};
+      this.state.showImage === '' ? Upload_Image : {uri: this.state.showImage};
     return (
       <View style={styles.mainContainer}>
         <ScrollView>

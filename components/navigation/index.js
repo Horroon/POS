@@ -13,6 +13,12 @@ import Item_Detail_Screen from '../screens/buyer/category/itemDetail';
 import Order_Screen from '../screens/buyer/orders/index';
 import Profile from '../screens/commonscreen/profile/index';
 import Splash_Screen from '../screens/splashsreen/index';
+import AddProduct from '../screens/seller/Home_screen/add_product';
+import AddImages from '../screens/seller/Home_screen/selectImages';
+import SellerOrderList from '../screens/seller/Home_screen/orderlist';
+import SellerOrderDetail from '../screens/seller/Home_screen/orderDetail';
+import OtherUserProfile from '../screens/buyer/otheruserprofile/index';
+import UserAdds from '../screens/buyer/userAdds/index';
 
 const HomeScreenRouter = createStackNavigator(
   {
@@ -25,9 +31,15 @@ const HomeScreenRouter = createStackNavigator(
     OrderScreen: {screen: Order_Screen},
     Profile: {screen: Profile},
     SplashScreen: {screen: Splash_Screen},
+    AddProduct: {screen: AddProduct},
+    AddImages: {screen: AddImages},
+    SellerOrderList: {screen: SellerOrderList},
+    SellerOrderDetail: {screen: SellerOrderDetail},
+    OtherUserProfile: {screen: OtherUserProfile},
+    UserAdds: {screen: UserAdds},
   },
   {
-    initialRouteName: 'SplashScreen',
+    initialRouteName: 'BuyerHomeScreen',
     defaultNavigationOptions: {
       header: null,
     },

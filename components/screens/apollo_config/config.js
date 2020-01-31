@@ -1,6 +1,6 @@
 import {ApolloClient} from 'apollo-client';
 import {InMemoryCache} from 'apollo-cache-inmemory';
-import {HttpLink} from 'apollo-link-http';
+import {createUploadLink} from "apollo-upload-client";
 import {AsyncStorage} from 'react-native';
 import {ApolloLink, fromPromise} from 'apollo-link';
 import {setContext} from 'apollo-link-context'
@@ -24,26 +24,32 @@ const authHeader = setContext(
     })
 )
 
+const defaultOptions = {
+  watchQuery: {
+    fetchPolicy: 'no-cache',
+    errorPolicy: 'ignore',
+  },
+  query: {
+    errorPolicy: 'all',
+  },
+}
+
 const cache = new InMemoryCache();
-const link = new HttpLink({
+const link = createUploadLink({
   uri: 'http://192.168.43.2:4000/',
 });
 
+export const mylink = 'http://192.168.43.2:4000/'
 
 const client = new ApolloClient({
   // Provide required constructor fields
   cache: cache,
   link: authHeader.concat(link),
-
   // Provide some optional constructor fields
   name: 'react-web-client',
   version: '1.3',
   queryDeduplication: false,
-  defaultOptions: {
-    watchQuery: {
-      fetchPolicy: 'cache-and-network',
-    },
-  },
+  defaultOptions: defaultOptions,
 });
 
 export default client;

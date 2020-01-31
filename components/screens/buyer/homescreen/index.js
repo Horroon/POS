@@ -1,5 +1,15 @@
 import React from 'react';
-import {View, Text, Container, Content, Button} from 'native-base';
+import {
+  View,
+  Text,
+  Container,
+  Content,
+  Button as NativeBaseButton,
+  Footer,
+  Icon,
+  FooterTab,
+} from 'native-base';
+import {FlatList, SafeAreaView} from 'react-native';
 import Header from '../header/index';
 import FindPartsForm from './findpartspart';
 import buyerhomescreenbackground from '../../../../assests/buyerhomescreenbackground.jpg';
@@ -7,8 +17,10 @@ import {ImageBackground, Dimensions, AsyncStorage} from 'react-native';
 import {showMessage} from 'react-native-flash-message';
 import client from '../../apollo_config/config';
 import gql from 'graphql-tag';
-
-const ScreenHeight = Dimensions.get('screen').height;
+import Drawer from '../../commonscreen/drawer/index';
+import BuyerSideBar from '../../commonscreen/sidebars/buyersidebar';
+import SingleItem from './singleItem';
+import GetLocation from 'react-native-get-location'
 
 class HomeScreen extends React.Component {
   constructor(props) {
@@ -23,6 +35,19 @@ class HomeScreen extends React.Component {
     };
   }
 
+  componentDidMount() {
+    GetLocation.getCurrentPosition({
+      enableHighAccuracy: true,
+      timeout: 15000,
+    })
+      .then(location => {
+        console.log(location);
+      })
+      .catch(error => {
+        const {code, message} = error;
+        console.warn(code, message);
+      });
+  }
   render() {
     console.log('selected Vehicle ', this.state.selectedVehicleMake);
     return (
@@ -30,7 +55,7 @@ class HomeScreen extends React.Component {
         <Header
           style={{backgroundColor: 'black', borderBottomWidth: 0}}
           iconName="menu"
-          headerMethod={() => alert('o wao')}
+          headerMethod={() => this.props.openControlPanel()}
           iconStyle={{}}
           navigation={this.props.navigation}>
           <Text
@@ -65,28 +90,108 @@ class HomeScreen extends React.Component {
           </Text>
         </Header>
         <Content>
-          <ImageBackground
-            source={buyerhomescreenbackground}
-            style={{height: ScreenHeight - 80, width: '100%'}}>
-            {/*  <View style={{width: '95%', alignSelf: 'center'}}>
-            <SearchBar />
-          </View> */}
+          <View style={{width: '100%'}}>
             <View
               style={{
-                width: '90%',
+                width: '95%',
                 alignSelf: 'center',
-                justifyContent: 'center',
-                height: '100%',
+                paddingTop: 10,
               }}>
-              <FindPartsForm
-                navigation={this.props}
-              />
+              <FindPartsForm navigation={this.props} />
             </View>
-          </ImageBackground>
+            <SafeAreaView style={{paddingTop: 10}}>
+              <View>
+                <Text style={{fontSize: 14, padding: 5}}> Spareparts</Text>
+              </View>
+              <FlatList
+                numColumns={2}
+                data={[
+                  {
+                    id: 1,
+                    pictures: [
+                      {url: require('../../../../assests/sparepart2.jpg')},
+                    ],
+                    name: 'Sparepart',
+                    address: '',
+                    price: '200PKR',
+                    location: {city: 'ISLBD', country: 'PK'},
+                  },
+                  {
+                    id: 1,
+                    pictures: [
+                      {url: require('../../../../assests/sparepart2.jpg')},
+                    ],
+                    name: 'Sparepart',
+                    address: '',
+                    price: '200PKR',
+                    location: {city: 'ISLBD', country: 'PK'},
+                  },
+                  {
+                    id: 1,
+                    pictures: [
+                      {url: require('../../../../assests/sparepart2.jpg')},
+                    ],
+                    name: 'Sparepart',
+                    address: '',
+                    price: '200PKR',
+                    location: {city: 'ISLBD', country: 'PK'},
+                  },
+                  {
+                    id: 1,
+                    pictures: [
+                      {url: require('../../../../assests/sparepart2.jpg')},
+                    ],
+                    name: 'Sparepart',
+                    address: '',
+                    price: '200PKR',
+                    location: {city: 'ISLBD', country: 'PK'},
+                  },
+                  {
+                    id: 1,
+                    pictures: [
+                      {url: require('../../../../assests/sparepart2.jpg')},
+                    ],
+                    name: 'Sparepart',
+                    address: '',
+                    price: '200PKR',
+                    location: {city: 'ISLBD', country: 'PK'},
+                  },
+                ]}
+                renderItem={item => (
+                  <SingleItem width={'44.5%'} height={200} item={item.item} />
+                )}
+                extraData
+                horizontal={false}
+                style={{width: '100%'}}
+              />
+            </SafeAreaView>
+          </View>
         </Content>
+
+        <Footer style={{backgroundColor: 'black'}}>
+          <FooterTab style={{backgroundColor: 'black'}}>
+            <NativeBaseButton>
+              <Icon name="ios-folder" />
+              <Text>Explore</Text>
+            </NativeBaseButton>
+            <NativeBaseButton onPress={this.sendMessage}>
+              <Icon name="ios-camera" />
+              <Text>Sell</Text>
+            </NativeBaseButton>
+            <NativeBaseButton onPress={this.makeCall}>
+              <Icon name="ios-document" />
+              <Text>My Adds</Text>
+            </NativeBaseButton>
+
+            <NativeBaseButton onPress={this.makeCall}>
+              <Icon name="ios-person" />
+              <Text>Account</Text>
+            </NativeBaseButton>
+          </FooterTab>
+        </Footer>
       </Container>
     );
   }
 }
 
-export default HomeScreen;
+export default Drawer(HomeScreen, BuyerSideBar);

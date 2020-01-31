@@ -36,7 +36,7 @@ function ContactModal(props) {
                   color: 'gray',
                   textAlign: 'center',
                 }}>
-                In case Of query! Please contact at.
+                In case of query! please contact at:
               </Text>
             </View>
             <View
@@ -49,14 +49,14 @@ function ContactModal(props) {
                 style={{
                   flexDirection: 'row',
                   marginVertical: 10,
-                  width: '60%',
+                  width: '80%',
                   justifyContent: 'space-around',
                 }}>
                 <Icon
                   name="mail"
                   style={{fontSize: 24, marginRight: 10, color: 'red'}}
                 />
-                <Text style={{fontSize: 18, color: 'gray'}}>ads@gmail.com</Text>
+                <Text style={{fontSize: 18, color: 'gray'}}> horroona@gmail.com</Text>
               </View>
 
               <View style={{flexDirection: 'row', marginBottom: 10}}>

@@ -28,6 +28,7 @@ import Routes from './components/navigation/index';
 import FlashMessage from 'react-native-flash-message';
 import {Provider} from 'react-redux';
 import {store} from './components/redux/store';
+import LoginModal from './components/screens/commonscreen/loginModal/index';
 
 const App = () => {
   return (
@@ -35,6 +36,7 @@ const App = () => {
       <ApolloProvider client={Client}>
         <Provider store={store}>
           <Routes />
+          <LoginModal />
         </Provider>
         <FlashMessage position="top" duration={3000} />
       </ApolloProvider>

@@ -44,16 +44,6 @@ function HeaderComponent(props) {
             onPress={() => props.navigation.navigate('Profile')}>
             <Icon name="person" style={{fontSize: 25, color: 'white'}} />
           </TouchableOpacity>
-          <TouchableOpacity
-            style={{flexDirection: 'row'}}
-            onPress={() =>
-              props.navigation.navigate('OrderScreen', {selectedItemKey: 1})
-            }>
-            <Icon name="notifications" style={{fontSize: 25, color: 'white'}} />
-            <Badge style={{marginTop: -10}}>
-              <Text style={{fontSize: 14}}>0</Text>
-            </Badge>
-          </TouchableOpacity>
         </Right>
       </Header>
       <ContactModal

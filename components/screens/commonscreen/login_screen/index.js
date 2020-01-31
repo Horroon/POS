@@ -75,7 +75,7 @@ export default class LoginComponent extends Component {
           AsyncStorage.setItem('token', data.login.AuthToken);
           console.log('token', data.login.AuthToken);
           if (role == 's') {
-            this.props.navigation.navigate('SellerHomeScreen');
+            this.props.navigation.navigate('SellerOrderList');
           }
           if (role == 'b') {
           this.props.navigation.navigate('BuyerHomeScreen');

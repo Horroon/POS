@@ -11,6 +11,7 @@ import {
   View,
   Input,
 } from 'native-base';
+import {StyleSheet} from 'react-native';
 import {showMessage} from 'react-native-flash-message';
 import {Button} from 'react-native-elements';
 import gql from 'graphql-tag';
@@ -46,7 +47,7 @@ const InitialState = {
     vehicleMakes: [],
     vehicleModels: [],
     vehicleModelYears: [],
-    vehicleCategories:[],
+    vehicleCategories: [],
     locations: [],
   },
   selectedVehicleModelYear: 0,
@@ -70,10 +71,10 @@ const FindPartsForm = props => {
 
   const updateStore = () => {
     if (
-      state.selectedVehicleMake !== 0 &&
-      state.selectedVehicleCategory !== 0 &&
-      state.selectedVehicleModelYear !== 0 &&
-      state.selectedvehicleModel !== 0 &&
+      state.selectedVehicleMake !== 0 ||
+      state.selectedVehicleCategory !== 0 ||
+      state.selectedVehicleModelYear !== 0 ||
+      state.selectedvehicleModel !== 0 ||
       state.selectedLocation !== 0
     ) {
       console.log('component state is ', state);
@@ -90,7 +91,7 @@ const FindPartsForm = props => {
 
       props.navigation.navigation.navigate('BuyerCategory');
     } else {
-      showMessage({message: 'Please All Fields Are Required', type: 'danger'});
+      showMessage({message: 'Please One Field is Required', type: 'danger'});
     }
   };
   console.log('store is ', store);
@@ -129,7 +130,7 @@ const FindPartsForm = props => {
 
       if (data) {
         console.log('data.vehiclemakes ', data.findParts);
-        
+
         setState({
           type: 'MakeModelYearCategoryLocation',
           payload: data.findParts,
@@ -156,124 +157,126 @@ const FindPartsForm = props => {
     }
   };
 
-  console.log('res...', state.MakeModelYearCategoryLocation)
+  console.log('res...', state.MakeModelYearCategoryLocation);
   return (
     <Form
-      style={{
-        padding: 2,
-        backgroundColor: 'lightgray',
-        paddingTop: 20,
-        borderRadius: 5,
-      }}>
+      style={styles.main_view_style}>
       <Text
-        style={{
-          textAlign: 'center',
-          fontSize: 20,
-          fontWeight: 'bold',
-          marginTop: 20,
-          fontFamily: 'fantasy',
-        }}>
+        style={styles.main_heading_style}>
         FIND PART BY VEHICLE
       </Text>
       <View style={{padding: 5, marginTop: 20}}>
-        <Item picker style={{borderBottomColor: 'red'}}>
-          <Picker
-            mode="dropdown"
-            iosIcon={<Icon name="arrow-down" style={{color: 'red'}} />}
-            style={{color: 'gray', fontSize: 14}}
-            placeholder="VEHICLE MAKE"
-            placeholderStyle={{color: '#bfc6ea'}}
-            placeholderIconColor="#007aff"
-            selectedValue={state.selectedVehicleMake}
-            onValueChange={e => {
-              setState({type: 'selectedVehicleMake', payload: e});
-            }}>
-            <Picker.Item label={'Vehicle Make'} value={0} />
-            {state.MakeModelYearCategoryLocation.vehicleMakes.map(make => {
-              return (
-                <Picker.Item label={make.name} value={make.id} key={make.id} />
-              );
-            })}
-          </Picker>
-        </Item>
-        <Item picker style={{borderBottomColor: 'red'}}>
-          <Picker
-            mode="dropdown"
-            iosIcon={<Icon name="arrow-down" style={{color: 'red'}} />}
-            style={{color: 'gray'}}
-            placeholder="VEHICLE MODEL"
-            placeholderStyle={{color: '#bfc6ea'}}
-            placeholderIconColor="#007aff"
-            selectedValue={state.selectedvehicleModel}
-            onValueChange={e => {
-              setState({type: 'selectedvehicleModel', payload: e});
-            }}>
-            <Picker.Item label="VEHICLE MODEL" value={0} />
-            {state.MakeModelYearCategoryLocation.vehicleModels.map(Item => {
-              return (
-                <Picker.Item
-                  key={Item.id}
-                  label={Item.name}
-                  value={Item.id}
-                />
-              );
-            })}
-          </Picker>
-        </Item>
-        <Item picker style={{borderBottomColor: 'red'}}>
-          <Picker
-            mode="dropdown"
-            iosIcon={<Icon name="arrow-down" style={{color: 'red'}} />}
-            style={{color: 'gray'}}
-            placeholder="MODEL YEAR"
-            placeholderStyle={{color: '#bfc6ea'}}
-            placeholderIconColor="#007aff"
-            selectedValue={state.selectedVehicleModelYear}
-            onValueChange={e =>
-              setState({type: 'selectedVehicleModelYear', payload: e})
-            }>
-            <Picker.Item label="Vehicle Model Year" value={0} />
-            {state.MakeModelYearCategoryLocation.vehicleModelYears.map(year => {
+        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+          <Item picker style={{borderBottomColor: 'red', width: '45%'}}>
+            <Picker
+              mode="dropdown"
+              iosIcon={<Icon name="arrow-down" color="white" style={styles.list_item_IconStyle} />}
+              textStyle={{fontSize: 9, color:'black'}}
+              style={{...styles.list_item_placeholderstyle}}
+              itemTextStyle={{fontSize: 9}}
+              placeholderStyle={{fontSize: 9, color:'black'}}
+              placeholder="VEHICLE MAKE"
+              selectedValue={state.selectedVehicleMake}
+              onValueChange={e => {
+                setState({type: 'selectedVehicleMake', payload: e});
+              }}>
+              <Picker.Item label={'Vehicle Make'} value={0} />
+              {state.MakeModelYearCategoryLocation.vehicleMakes.map(make => {
                 return (
                   <Picker.Item
-                    key={year.id}
-                    label={year.name}
-                    value={year.id}
+                    label={make.name}
+                    value={make.id}
+                    key={make.id}
                   />
                 );
-            })}
-          </Picker>
-        </Item>
-        <Item picker style={{borderBottomColor: 'red'}}>
-          <Picker
-            mode="dropdown"
-            iosIcon={<Icon name="arrow-down" style={{color: 'red'}} />}
-            style={{color: 'gray'}}
-            placeholder="CATEGORY"
-            placeholderStyle={{color: '#bfc6ea'}}
-            placeholderIconColor="#007aff"
-            selectedValue={state.selectedVehicleCategory}
-            onValueChange={e =>
-              setState({type: 'selectedVehicleCategory', payload: e})
-            }>
-            <Picker.Item label="Category" value={0} />
-            {state.MakeModelYearCategoryLocation.vehicleCategories.map(Item => {
-              return (
-                <Picker.Item
-                  key={Item.id}
-                  label={Item.name}
-                  value={Item.id}
-                />
-              );
-            })}
-          </Picker>
-        </Item>
+              })}
+            </Picker>
+          </Item>
+          <Item picker style={{borderBottomColor: 'red', width: '50%'}}>
+            <Picker
+              mode="dropdown"
+              iosIcon={<Icon name="arrow-down" style={{color: 'red'}} />}
+              style={styles.list_item_placeholderstyle}
+              placeholder="VEHICLE MODEL"
+              placeholderStyle={{color: '#bfc6ea'}}
+              placeholderIconColor="#007aff"
+              selectedValue={state.selectedvehicleModel}
+              onValueChange={e => {
+                setState({type: 'selectedvehicleModel', payload: e});
+              }}>
+              <Picker.Item label="VEHICLE MODEL" value={0} />
+              {state.MakeModelYearCategoryLocation.vehicleModels.map(Item => {
+                return (
+                  <Picker.Item
+                    key={Item.id}
+                    label={Item.name}
+                    value={Item.id}
+                  />
+                );
+              })}
+            </Picker>
+          </Item>
+        </View>
+        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+          <Item picker style={{borderBottomColor: 'red', width: '45%'}}>
+            <Picker
+              mode="dropdown"
+              iosIcon={<Icon name="arrow-down" style={{fontSize: 25, color:'white'}} />}
+              style={styles.list_item_placeholderstyle}
+              placeholder="MODEL YEAR"
+              placeholderStyle={{color: '#bfc6ea'}}
+              placeholderIconColor="#007aff"
+              selectedValue={state.selectedVehicleModelYear}
+              onValueChange={e =>
+                setState({type: 'selectedVehicleModelYear', payload: e})
+              }>
+              <Picker.Item label="Vehicle Model Year" value={0} />
+              {state.MakeModelYearCategoryLocation.vehicleModelYears.map(
+                year => {
+                  return (
+                    <Picker.Item
+                      key={year.id}
+                      label={year.name}
+                      value={year.id}
+                    />
+                  );
+                },
+              )}
+            </Picker>
+          </Item>
+          <Item picker style={{borderBottomColor: 'red', width: '50%'}}>
+            <Picker
+              mode="dropdown"
+              iosIcon={<Icon name="arrow-down" style={{color: 'red'}} />}
+              style={styles.list_item_placeholderstyle}
+              placeholder="CATEGORY"
+              placeholderStyle={{color: '#bfc6ea'}}
+              placeholderIconColor="#007aff"
+              selectedValue={state.selectedVehicleCategory}
+              onValueChange={e =>
+                setState({type: 'selectedVehicleCategory', payload: e})
+              }>
+              <Picker.Item label="Category" value={0} />
+              {state.MakeModelYearCategoryLocation.vehicleCategories.map(
+                Item => {
+                  return (
+                    <Picker.Item
+                      key={Item.id}
+                      label={Item.name}
+                      value={Item.id}
+                    />
+                  );
+                },
+              )}
+            </Picker>
+          </Item>
+        </View>
 
         <Item picker style={{borderBottomColor: 'red'}}>
           <Picker
             mode="dropdown"
             iosIcon={<Icon name="arrow-down" style={{color: 'red'}} />}
-            style={{color: 'gray'}}
+            style={styles.list_item_placeholderstyle}
             placeholder="LOCATION"
             placeholderStyle={{color: '#bfc6ea'}}
             placeholderIconColor="#007aff"
@@ -283,13 +286,13 @@ const FindPartsForm = props => {
             }>
             <Picker.Item label="Location" value={0} />
             {state.MakeModelYearCategoryLocation.locations.map(location => {
-                return (
-                  <Picker.Item
-                    key={location.id}
-                    label={location.city}
-                    value={location.id}
-                  />
-                );
+              return (
+                <Picker.Item
+                  key={location.id}
+                  label={location.city}
+                  value={location.id}
+                />
+              );
             })}
           </Picker>
         </Item>
@@ -319,3 +322,28 @@ const FindPartsForm = props => {
 
 //Main Functon End
 export default FindPartsForm;
+
+//styles
+const styles = StyleSheet.create({
+  main_view_style: {
+    padding: 2,
+    backgroundColor: 'black',
+    paddingTop: 20,
+    borderRadius: 5,
+  },
+  main_heading_style:{
+    textAlign: 'center',
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginTop: 20,
+    color:'white',
+    fontFamily: 'fantasy',
+  },
+  list_item_placeholderstyle:{
+    color:'white',
+    fontSize: 12
+  },
+  list_item_IconStyle:{
+    color:'white'
+  }
+});

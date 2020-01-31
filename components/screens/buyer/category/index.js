@@ -17,8 +17,8 @@ import Header from '../header/index';
 import SearchBar from './searchscreen';
 import {showMessage} from 'react-native-flash-message';
 import spareImg1 from '../../../../assests/spr1.jpg';
-import client from '../../apollo_config/config';
-
+import client, {mylink} from '../../apollo_config/config';
+import SingleItem from '../homescreen/singleItem';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 
@@ -57,18 +57,16 @@ class Category extends React.Component {
               id
               name
               price
-              pictures
-              isAvailable
-              shops {
-                id
-                name
-                address
-                location {
-                  id
-                  city
-                  country
-                }
+              pictures {
+                url
               }
+              isAvailable
+              location {
+                id
+                city
+                country
+              }
+              address
             }
           }
         `,
@@ -101,6 +99,12 @@ class Category extends React.Component {
     }
   };
 
+  selectedItemIdUpdateMethod = item => {
+    this.props.selectedItemIdUpdate(item.id);
+    this.props.navigation.navigate('BuyerItemDetail', {
+      item: item,
+    });
+  };
   list = item => {
     return (
       <TouchableOpacity
@@ -113,7 +117,14 @@ class Category extends React.Component {
         <Card containerStyle={{borderRadius: 5, backgroundColor: 'gray'}}>
           <View style={{flexDirection: 'row'}}>
             <View style={{width: '30%'}}>
-              <Image source={spareImg1} style={{height: 100, width: '100%'}} />
+              <Image
+                source={
+                  item.pictures.length > 0
+                    ? {uri: mylink + item.pictures[0].url}
+                    : spareImg1
+                }
+                style={{height: 100, width: '100%'}}
+              />
             </View>
             <View
               style={{
@@ -135,7 +146,7 @@ class Category extends React.Component {
               </View>
               <View>
                 <Text style={{fontSize: 13, color: 'white'}}>
-                  {item.shops[0].address}
+                  {item.address}
                 </Text>
               </View>
               <View
@@ -150,8 +161,7 @@ class Category extends React.Component {
                       paddingLeft: 4,
                       fontSize: 12,
                     }}>
-                    {item.shops[0].location.city},{' '}
-                    {item.shops[0].location.country}
+                    {item.location.city}, {item.location.country}
                   </Text>
                 </View>
                 <View>
@@ -170,7 +180,7 @@ class Category extends React.Component {
   };
 
   render() {
-    console.log('store in category: ', this.props.store);
+    console.log('sparepart: ', this.state.spareParts);
     return (
       <Container>
         <Header
@@ -210,20 +220,41 @@ class Category extends React.Component {
             .COM
           </Text>
         </Header>
-        <View style={{flex: 1, backgroundColor: 'black'}}>
+        <View style={{flex: 1}}>
           {/*       <View style={{width: '100%', alignSelf: 'center'}}>
             <SearchBar />
           </View> */}
           <SafeAreaView style={{flex: 1}}>
             {this.state.spareParts.length > 0 ? (
-              <FlatList
+              <React.Fragment>
+                {/* <FlatList
                 data={this.state.spareParts}
                 extraData
                 keyExtractor={item => item.id.toString()}
                 renderItem={item => this.list(item.item)}
-              />
+              /> */}
+                <FlatList
+                  data={this.state.spareParts}
+                  renderItem={item => (
+                    <SingleItem height={200} width={'44.5%'} item={item.item} selectedItemIdUpdateMethod={this.selectedItemIdUpdateMethod} />
+                  )}
+                  extraData
+                  keyExtractor={item => item.id.toString()}
+                  numColumns={2}
+                  showsHorizontalScrollIndicator={false}
+                />
+              </React.Fragment>
             ) : (
-              <Text>No Record</Text>
+              <View
+                style={{
+                  flex: 1,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <Text style={{color: 'white', textAlign: 'center'}}>
+                  No Sparepart found
+                </Text>
+              </View>
             )}
           </SafeAreaView>
         </View>
