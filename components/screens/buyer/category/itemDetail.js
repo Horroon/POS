@@ -256,8 +256,6 @@ class ItemDetail extends React.Component {
                   }}>
                   <TouchableOpacity>
                     <Icon
-                      name="ios-arrow-back"
-                      style={{color: 'white', fontSize: 40}}
                       onPress={() => this.changeImge('back')}
                     />
                   </TouchableOpacity>
@@ -273,7 +271,6 @@ class ItemDetail extends React.Component {
               </View>
               <View
                 style={{
-                  paddingHorizontal: 20,
                   paddingVertical: 10,
                 }}>
                 <View
