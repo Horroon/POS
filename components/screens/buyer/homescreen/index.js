@@ -20,7 +20,10 @@ import gql from 'graphql-tag';
 import Drawer from '../../commonscreen/drawer/index';
 import BuyerSideBar from '../../commonscreen/sidebars/buyersidebar';
 import SingleItem from './singleItem';
-import GetLocation from 'react-native-get-location'
+import GetLocation from 'react-native-get-location';
+import GEO_CODE from 'react-native-geocoder';
+
+GEO_CODE.fallbackToGoogle('AIzaSyBflho0fOH_r3KR2uE4ubqCpc_6nHOTuHk');
 
 class HomeScreen extends React.Component {
   constructor(props) {
@@ -35,18 +38,38 @@ class HomeScreen extends React.Component {
     };
   }
 
-  componentDidMount() {
-    GetLocation.getCurrentPosition({
-      enableHighAccuracy: true,
+  //get location
+  GetLocationUserLocation = async () => {
+    navigator.geolocation.getCurrentPosition(
+      ({coords}) => {
+        alert(JSON.stringify(coords));
+      },
+      err => {
+        alert(err);
+      },
+      {enableHighAccuracy: false, timeout: 20000, maximumAge: 1000},
+    );
+    resp = await GEO_CODE.geocodePosition({
+      lng: 69.34511599999999,
+      lat: 30.375321000000003,
+    });
+    alert(JSON.stringify(resp));
+    console.log('resp: in console..;;', resp);
+    /*  GetLocation.getCurrentPosition({
+       enableHighAccuracy: true,
       timeout: 15000,
     })
       .then(location => {
-        console.log(location);
+        console.log('location is ', location);
       })
       .catch(error => {
         const {code, message} = error;
-        console.warn(code, message);
-      });
+        console.warn('error during fatching location ', code, message);
+      }); */
+  };
+
+  componentDidMount() {
+    this.GetLocationUserLocation();
   }
   render() {
     console.log('selected Vehicle ', this.state.selectedVehicleMake);

@@ -4,6 +4,7 @@ import {View, Text, Dimensions, Image} from 'react-native';
 import {Overlay, Button} from 'react-native-elements';
 import {useDispatch, useSelector} from 'react-redux';
 import {FacebookManager} from './facebooklogin';
+import {InstaLogin} from './Instagram_login';
 
 const ScreenHeight = Dimensions.get('window').height;
 
@@ -62,7 +63,7 @@ const LoginModal = () => {
                   backgroundColor: '#3b5998',
                 }}
                 titleStyle={{color: 'white'}}
-                onPress={()=>FacebookManager(dispatch)}
+                onPress={() => FacebookManager(dispatch)}
               />
             </View>
             <View style={{paddingVertical: 10}}>
@@ -83,6 +84,24 @@ const LoginModal = () => {
                 titleStyle={{color: 'white'}}
               />
             </View>
+
+            <InstaLogin />
+            {/*  <Button
+                title="Login with Google"
+                icon={
+                  <Icon
+                    name="logo-google"
+                    style={{paddingRight: 10, color: 'white'}}
+                  />
+                }
+                buttonStyle={{
+                  width: '100%',
+                  height: 50,
+                  borderRadius: 25,
+                  backgroundColor: '#db4a39',
+                }}
+                titleStyle={{color: 'white'}}
+              /> */}
           </View>
         </Content>
       </Container>

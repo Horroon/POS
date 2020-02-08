@@ -43,6 +43,10 @@ target 'pos' do
 
   pod 'react-native-fbsdk', :path => '../node_modules/react-native-fbsdk'
 
+  pod 'ReactNativeGetLocation', :path => '../node_modules/react-native-get-location'
+
+  pod 'react-native-geocoder', :path => '../node_modules/react-native-geocoder'
+
   target 'posTests' do
     inherit! :search_paths
     # Pods for testing

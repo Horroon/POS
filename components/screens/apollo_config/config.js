@@ -11,6 +11,7 @@ const getToken = async () => {
 //mobile wifi 192.168.43.2
 //mh9A 192.168.100.106
 //192.168.100.112
+//lala wifi 192.168.8.102
 // Instantiate required constructor fields
 
 
@@ -34,12 +35,13 @@ const defaultOptions = {
   },
 }
 
+export const mylink = 'http://192.168.43.2:4000/'
+
 const cache = new InMemoryCache();
 const link = createUploadLink({
-  uri: 'http://192.168.43.2:4000/',
+  uri: mylink,
 });
 
-export const mylink = 'http://192.168.43.2:4000/'
 
 const client = new ApolloClient({
   // Provide required constructor fields
