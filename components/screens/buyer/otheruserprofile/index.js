@@ -65,6 +65,7 @@ class OtherUserProfile extends React.Component {
                   id
                   url
                 }
+                updatedAt
               }
             }
           }
@@ -72,7 +73,7 @@ class OtherUserProfile extends React.Component {
         variables: {
           id: this.props.navigation.getParam('id'),
         },
-        fetchPolicy:'no-cache'
+        fetchPolicy:'network-only'
       });
 
       if (data) {
@@ -107,7 +108,7 @@ class OtherUserProfile extends React.Component {
   };
 
   render() {
-    console.log('param id ', this.props.navigation.getParam('id'));
+    console.log('param id ', this.state.user.spareparts);
     return (
       <Container>
         <Header

@@ -36,7 +36,7 @@ class HomeSideBar extends Component {
   }
 
   checkLogin = async () => {
-    const token =await AsyncStorage.getItem('token');
+    const token = await AsyncStorage.getItem('token');
     if (token) {
       this.profileData(); //if user login then call profileData method
       this.setState({isLogin: true});
@@ -49,6 +49,16 @@ class HomeSideBar extends Component {
     this.checkLogin();
   }
 
+  UNSAFE_componentWillUpdate(preState) {
+    if (preState != this.props) {
+      if (this.props.store.loginData.lgn_Id) {
+        this.profileData();
+        return true;
+      }
+    } else {
+      return false;
+    }
+  }
   profileData = async () => {
     try {
       this.setState({modalVisible: true});
@@ -66,7 +76,7 @@ class HomeSideBar extends Component {
       });
       this.setState({modalVisible: false});
       if (data) {
-        this.setState({person: data.profileData});
+        this.setState({person: data.profileData, isLogin: true});
       }
     } catch (e) {
       console.log('eer ', e);
@@ -105,7 +115,7 @@ class HomeSideBar extends Component {
               justifyContent: 'center',
             }}
             source={require('../../../../assests/sidebar_background.jpg')}>
-            {this.state.isLogin ? (
+            {this.state.isLogin || this.props.store.loginData.lgn_Id ? (
               <React.Fragment>
                 <View
                   style={{
@@ -137,17 +147,26 @@ class HomeSideBar extends Component {
             ) : (
               <Button
                 title="Click Here To Login"
-                titleStyle={{color:'white', textDecorationLine:'underline', textDecorationStyle:"dashed", fontSize: 20}}
+                titleStyle={{
+                  color: 'white',
+                  textDecorationLine: 'underline',
+                  textDecorationStyle: 'dashed',
+                  fontSize: 20,
+                }}
                 buttonStyle={{
                   backgroundColor: '#00FFFFF',
                   width: '100%',
                   borderRadius: 25,
                 }}
-                onPress={()=>this.props.loginModalAction(true)}
+                onPress={() => this.props.loginModalAction(true)}
               />
             )}
           </ImageBackground>
-          <ScrollView style={{height: height - 250 - 80, display:this.state.isLogin?"flex":'none'}}>
+          <ScrollView
+            style={{
+              height: height - 250 - 80,
+              display: this.state.isLogin || this.props.store.loginData.lgn_Id ? 'flex' : 'none',
+            }}>
             {/* profile row end */}
             <TouchableHighlight
               style={{borderBottomWidth: 1, borderColor: 'gray'}}
@@ -167,8 +186,20 @@ class HomeSideBar extends Component {
             <TouchableHighlight
               style={{borderBottomWidth: 1, borderColor: 'gray'}}
               onPress={() => {
+                //remove data from redux
+                let {loginData} = this.props.store;
+                loginData.token = null;
+                loginData.lgn_email = null;
+                loginData.lgn_Id = null;
+
+                //update redux
+                this.props.loginDataAction(loginData);
+
                 AsyncStorage.removeItem('token');
                 AsyncStorage.removeItem('role');
+                AsyncStorage.removeItem('lgn_email');
+                AsyncStorage.removeItem('lgn_Id');
+                this.setState({isLogin: false});
                 this.props.navigation.navigate('BuyerHomeScreen');
               }}>
               <Card transparent>
@@ -205,7 +236,10 @@ const mapStateToProps = store => {
 
 const mapDispatchToProps = dispatch => {
   return bindActionCreators(
-    {loginModalAction: input => ({type: 'loginModal', payload: input})},
+    {
+      loginModalAction: input => ({type: 'loginModal', payload: input}),
+      loginDataAction: input => ({type: 'loginData', payload: input}),
+    },
     dispatch,
   );
 };

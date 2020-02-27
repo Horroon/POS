@@ -11,7 +11,13 @@ import {
   Badge,
   Button,
 } from 'native-base';
-import {FlatList, SafeAreaView, TouchableOpacity, Dimensions, Image} from 'react-native';
+import {
+  FlatList,
+  SafeAreaView,
+  TouchableOpacity,
+  Dimensions,
+  Image,
+} from 'react-native';
 import Header from '../header/index';
 import {showMessage} from 'react-native-flash-message';
 import client, {mylink} from '../../apollo_config/config';
@@ -68,6 +74,7 @@ class UserAdds extends React.Component {
                   id
                   url
                 }
+                updatedAt
               }
             }
           }
@@ -75,7 +82,7 @@ class UserAdds extends React.Component {
         variables: {
           id: this.props.navigation.getParam('p_id'),
         },
-        fetchPolicy:'no-cache'
+        fetchPolicy: 'network-only',
       });
 
       if (data) {
@@ -151,7 +158,7 @@ class UserAdds extends React.Component {
           </Text>
         </Header>
         <View style={{flex: 1}}>
-        {this.state.loader ? (
+          {this.state.loader ? (
             <Image
               source={loader_gif}
               style={{
@@ -162,46 +169,48 @@ class UserAdds extends React.Component {
               resizeMode="cover"
             />
           ) : (
-          <SafeAreaView style={{flex: 1}}>
-            {this.state.user.spareparts.length > 0 ? (
-              <React.Fragment>
-                {/* <FlatList
+            <SafeAreaView style={{flex: 1}}>
+              {this.state.user.spareparts.length > 0 ? (
+                <React.Fragment>
+                  {/* <FlatList
                 data={this.state.spareParts}
                 extraData
                 keyExtractor={item => item.id.toString()}
                 renderItem={item => this.list(item.item)}
               /> */}
-                <FlatList
-                  data={this.state.user.spareparts}
-                  renderItem={item => (
-                    <SingleItem
-                      height={200}
-                      width={'44.5%'}
-                      item={item.item}
-                      selectedItemIdUpdateMethod={
-                        this.selectedItemIdUpdateMethod
-                      }
-                    />
-                  )}
-                  extraData
-                  keyExtractor={item => item.id.toString()}
-                  numColumns={2}
-                  showsHorizontalScrollIndicator={false}
-                />
-              </React.Fragment>
-            ) : (
-              <View
-                style={{
-                  flex: 1,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <Text style={{color: 'white', textAlign: 'center', fontSize: 14}}>
-                  No Sparepart found
-                </Text>
-              </View>
-            )}
-          </SafeAreaView>)}
+                  <FlatList
+                    data={this.state.user.spareparts}
+                    renderItem={item => (
+                      <SingleItem
+                        height={200}
+                        width={'44.5%'}
+                        item={item.item}
+                        selectedItemIdUpdateMethod={
+                          this.selectedItemIdUpdateMethod
+                        }
+                      />
+                    )}
+                    extraData
+                    keyExtractor={item => item.id.toString()}
+                    numColumns={2}
+                    showsHorizontalScrollIndicator={false}
+                  />
+                </React.Fragment>
+              ) : (
+                <View
+                  style={{
+                    flex: 1,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
+                  <Text
+                    style={{textAlign: 'center', fontSize: 14}}>
+                    No Sparepart Found
+                  </Text>
+                </View>
+              )}
+            </SafeAreaView>
+          )}
         </View>
       </Container>
     );

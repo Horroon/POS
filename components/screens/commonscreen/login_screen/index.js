@@ -19,9 +19,12 @@ import LoginScreenBackgroundImage from '../../../../assests/loginScreenBackgroun
 import {Container, Content} from 'native-base';
 import Client from '../../apollo_config/config';
 import gql from 'graphql-tag';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
+
 const ScreenHeight = Math.round(Dimensions.get('screen').height);
 
-export default class LoginComponent extends Component {
+class LoginComponent extends Component {
   //header data
   static navigationOptions = {
     title: 'login',
@@ -42,6 +45,8 @@ export default class LoginComponent extends Component {
       query Login($email: String!, $password: String!) {
         login(email: $email, password: $password) {
           AuthToken
+          email
+          id
         }
       }
     `;
@@ -71,14 +76,25 @@ export default class LoginComponent extends Component {
             type: 'success',
           });
 
-          console.log('data in login ', data);
+          //data for redux store
+          let {loginData} = this.props.store;
+          loginData.token = data.login.AuthToken
+          loginData.lgn_email = data.login.email;
+          loginData.lgn_Id = data.login.id;
+
+          //dispatch data to store
+          this.props.loginData(loginData);
+
+          //store data in Async
           AsyncStorage.setItem('token', data.login.AuthToken);
-          console.log('token', data.login.AuthToken);
+          AsyncStorage.setItem('lgn_Id', data.login.id);
+          AsyncStorage.setItem('lgn_email', data.login.email);
+
           if (role == 's') {
             this.props.navigation.navigate('SellerOrderList');
           }
           if (role == 'b') {
-          this.props.navigation.navigate('BuyerHomeScreen');
+            this.props.navigation.navigate('BuyerHomeScreen');
           }
         }
         if (loading) {
@@ -187,3 +203,20 @@ export default class LoginComponent extends Component {
     );
   }
 }
+
+function mapStateToProps(state) {
+  return {store: state};
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(
+    {
+      loginData: obj => {
+        return {type: 'loginData', payload: obj};
+      },
+    },
+    dispatch,
+  );
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(LoginComponent);

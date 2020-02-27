@@ -5,16 +5,12 @@ import {
   Container,
   Content,
   Button as NativeBaseButton,
-  Footer,
-  Icon,
-  FooterTab,
 } from 'native-base';
 import {FlatList, SafeAreaView} from 'react-native';
 import Header from '../header/index';
 import FindPartsForm from './findpartspart';
 import buyerhomescreenbackground from '../../../../assests/buyerhomescreenbackground.jpg';
 import {ImageBackground, Dimensions, AsyncStorage} from 'react-native';
-import {showMessage} from 'react-native-flash-message';
 import client from '../../apollo_config/config';
 import gql from 'graphql-tag';
 import Drawer from '../../commonscreen/drawer/index';
@@ -22,6 +18,10 @@ import BuyerSideBar from '../../commonscreen/sidebars/buyersidebar';
 import SingleItem from './singleItem';
 import GetLocation from 'react-native-get-location';
 import GEO_CODE from 'react-native-geocoder';
+import {showMessage} from 'react-native-flash-message';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
+import Footer from './footer';
 
 GEO_CODE.fallbackToGoogle('AIzaSyBflho0fOH_r3KR2uE4ubqCpc_6nHOTuHk');
 
@@ -35,44 +35,105 @@ class HomeScreen extends React.Component {
       vehicleCategories: [],
       vehicleModels: [],
       selectedVehicleMake: 0,
+      currentCitySpareparts: [
+        {
+          id: 0,
+          name: '',
+          price: '',
+          pictures: [{url: ''}],
+          location: {city: ''},
+        },
+      ],
     };
   }
 
   //get location
   GetLocationUserLocation = async () => {
-    navigator.geolocation.getCurrentPosition(
-      ({coords}) => {
-        alert(JSON.stringify(coords));
-      },
-      err => {
-        alert(err);
-      },
-      {enableHighAccuracy: false, timeout: 20000, maximumAge: 1000},
-    );
-    resp = await GEO_CODE.geocodePosition({
-      lng: 69.34511599999999,
-      lat: 30.375321000000003,
-    });
-    alert(JSON.stringify(resp));
-    console.log('resp: in console..;;', resp);
-    /*  GetLocation.getCurrentPosition({
-       enableHighAccuracy: true,
-      timeout: 15000,
-    })
-      .then(location => {
-        console.log('location is ', location);
-      })
-      .catch(error => {
-        const {code, message} = error;
-        console.warn('error during fatching location ', code, message);
-      }); */
+    try {
+      let resp = await GetLocation.getCurrentPosition({
+        enableHighAccuracy: true,
+        timeout: 1000 * 60,
+      });
+
+      let address = await GEO_CODE.geocodePosition({
+        lat: resp.latitude,
+        lng: resp.longitude,
+      });
+      this.setState({currentCity: address[0].subAdminArea});
+      if (address) {
+        this.getCurrentCity_Spareparts(address[0].subAdminArea);
+      }
+    } catch (e) {
+      showMessage(e.message);
+    }
   };
 
   componentDidMount() {
     this.GetLocationUserLocation();
   }
+
+  getCurrentCity_Spareparts = async city => {
+    try {
+      const {data, errors, loading} = await client.query({
+        query: gql`
+          query findAllSparepartsForUserCurrentLocation($city: String!) {
+            findAllSparepartsForUserCurrentLocation(city: $city) {
+              id
+              name
+              price
+              pictures {
+                url
+              }
+              isAvailable
+              location {
+                id
+                city
+                country
+              }
+              address
+              updatedAt
+            }
+          }
+        `,
+        variables: {
+          city: city,
+        },
+        fetchPolicy: 'network-only',
+      });
+      if (data) {
+        this.setState({
+          currentCitySpareparts: data.findAllSparepartsForUserCurrentLocation,
+        });
+      }
+    } catch (e) {
+      if (e.graphQLErrors[0]) {
+        showMessage({
+          message: e.graphQLErrors[0].message,
+          type: 'danger',
+        });
+      }
+      if (e.networkError) {
+        console.log('error ', e.networkError);
+        showMessage({
+          message: 'Network Problem!',
+          type: 'danger',
+        });
+      }
+    }
+  };
+
+  selectedItemIdUpdateMethod = item => {
+    this.props.selectedItemIdUpdate(item.id);
+    this.props.navigation.navigate('BuyerItemDetail', {
+      item: item,
+    });
+  };
+
   render() {
-    console.log('selected Vehicle ', this.state.selectedVehicleMake);
+    console.log('store login Data  ', this.props.store);
+    AsyncStorage.removeItem('token');
+    AsyncStorage.removeItem('lgn_email');
+    AsyncStorage.removeItem('lgn_Id');
     return (
       <Container>
         <Header
@@ -122,99 +183,63 @@ class HomeScreen extends React.Component {
               }}>
               <FindPartsForm navigation={this.props} />
             </View>
-            <SafeAreaView style={{paddingTop: 10}}>
-              <View>
-                <Text style={{fontSize: 14, padding: 5}}> Spareparts</Text>
-              </View>
-              <FlatList
-                numColumns={2}
-                data={[
-                  {
-                    id: 1,
-                    pictures: [
-                      {url: require('../../../../assests/sparepart2.jpg')},
-                    ],
-                    name: 'Sparepart',
-                    address: '',
-                    price: '200PKR',
-                    location: {city: 'ISLBD', country: 'PK'},
-                  },
-                  {
-                    id: 1,
-                    pictures: [
-                      {url: require('../../../../assests/sparepart2.jpg')},
-                    ],
-                    name: 'Sparepart',
-                    address: '',
-                    price: '200PKR',
-                    location: {city: 'ISLBD', country: 'PK'},
-                  },
-                  {
-                    id: 1,
-                    pictures: [
-                      {url: require('../../../../assests/sparepart2.jpg')},
-                    ],
-                    name: 'Sparepart',
-                    address: '',
-                    price: '200PKR',
-                    location: {city: 'ISLBD', country: 'PK'},
-                  },
-                  {
-                    id: 1,
-                    pictures: [
-                      {url: require('../../../../assests/sparepart2.jpg')},
-                    ],
-                    name: 'Sparepart',
-                    address: '',
-                    price: '200PKR',
-                    location: {city: 'ISLBD', country: 'PK'},
-                  },
-                  {
-                    id: 1,
-                    pictures: [
-                      {url: require('../../../../assests/sparepart2.jpg')},
-                    ],
-                    name: 'Sparepart',
-                    address: '',
-                    price: '200PKR',
-                    location: {city: 'ISLBD', country: 'PK'},
-                  },
-                ]}
-                renderItem={item => (
-                  <SingleItem width={'44.5%'} height={200} item={item.item} />
-                )}
-                extraData
-                horizontal={false}
-                style={{width: '100%'}}
-              />
-            </SafeAreaView>
+            {this.state.currentCitySpareparts.length > 0 && (
+              <SafeAreaView
+                style={{
+                  paddingTop: 10,
+                  display:
+                    this.state.currentCitySpareparts.length > 0
+                      ? 'flex'
+                      : 'none',
+                }}>
+                <View>
+                  <Text style={{fontSize: 14, padding: 5, fontWeight: 'bold'}}>
+                    {' '}
+                    Spareparts In{' '}
+                    {this.state.currentCitySpareparts[0].location.city} City
+                  </Text>
+                </View>
+                <FlatList
+                  numColumns={2}
+                  data={this.state.currentCitySpareparts}
+                  renderItem={item => (
+                    <SingleItem
+                      width={'44.5%'}
+                      height={200}
+                      item={item.item}
+                      selectedItemIdUpdateMethod={
+                        this.selectedItemIdUpdateMethod
+                      }
+                    />
+                  )}
+                  extraData
+                  horizontal={false}
+                  style={{width: '100%'}}
+                />
+              </SafeAreaView>
+            )}
           </View>
         </Content>
 
-        <Footer style={{backgroundColor: 'black'}}>
-          <FooterTab style={{backgroundColor: 'black'}}>
-            <NativeBaseButton>
-              <Icon name="ios-folder" />
-              <Text>Explore</Text>
-            </NativeBaseButton>
-            <NativeBaseButton onPress={this.sendMessage}>
-              <Icon name="ios-camera" />
-              <Text>Sell</Text>
-            </NativeBaseButton>
-            <NativeBaseButton onPress={this.makeCall}>
-              <Icon name="ios-document" />
-              <Text>My Adds</Text>
-            </NativeBaseButton>
-
-            <NativeBaseButton onPress={this.makeCall}>
-              <Icon name="ios-person" />
-              <Text>Account</Text>
-            </NativeBaseButton>
-          </FooterTab>
-        </Footer>
+        <Footer {...this.props} />
       </Container>
     );
   }
 }
+function mapStateToProps(state) {
+  return {store: state};
+}
 
-export default Drawer(HomeScreen, BuyerSideBar);
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(
+    {
+      selectedItemIdUpdate: input => ({type: 'selectedItemId', payload: input}),
+    },
+    dispatch,
+  );
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Drawer(HomeScreen, BuyerSideBar));

@@ -10,6 +10,8 @@ const Reducer = (state = InitialState, action) => {
       return {...state, sparepartslist: action.payload};
     case 'loginModal':
       return {...state, loginModal: action.payload};
+    case 'loginData':
+      return {...state, loginData: action.payload};
     default:
       return {...state};
   }

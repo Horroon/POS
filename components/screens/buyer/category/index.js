@@ -11,7 +11,12 @@ import {
   Badge,
   Button,
 } from 'native-base';
-import {FlatList, SafeAreaView, TouchableOpacity} from 'react-native';
+import {
+  FlatList,
+  SafeAreaView,
+  TouchableOpacity,
+  AsyncStorage,
+} from 'react-native';
 import {Divider, Card, Image} from 'react-native-elements';
 import Header from '../header/index';
 import SearchBar from './searchscreen';
@@ -67,6 +72,7 @@ class Category extends React.Component {
                 country
               }
               address
+              updatedAt
             }
           }
         `,
@@ -124,8 +130,8 @@ class Category extends React.Component {
                     : spareImg1
                 }
                 style={{height: 100, width: '100%'}}
-              />
-            </View>
+              />{' '}
+            </View>{' '}
             <View
               style={{
                 flexDirection: 'column',
@@ -140,19 +146,21 @@ class Category extends React.Component {
                     fontSize: 16,
                     color: 'white',
                   }}>
-                  {item.name}
-                </Text>
-                <Icon name="heart" style={{color: 'red'}} />
-              </View>
+                  {' '}
+                  {item.name}{' '}
+                </Text>{' '}
+                <Icon name="heart" style={{color: 'red'}} />{' '}
+              </View>{' '}
               <View>
                 <Text style={{fontSize: 13, color: 'white'}}>
-                  {item.address}
-                </Text>
-              </View>
+                  {' '}
+                  {item.address}{' '}
+                </Text>{' '}
+              </View>{' '}
               <View
                 style={{flexDirection: 'row', justifyContent: 'space-between'}}>
                 <View style={{flexDirection: 'row'}}>
-                  <Icon name="ios-pin" style={{fontSize: 16, color: 'black'}} />
+                  <Icon name="ios-pin" style={{fontSize: 16, color: 'black'}} />{' '}
                   <Text
                     style={{
                       marginLeft: '2%',
@@ -161,26 +169,28 @@ class Category extends React.Component {
                       paddingLeft: 4,
                       fontSize: 12,
                     }}>
-                    {item.location.city}, {item.location.country}
-                  </Text>
-                </View>
+                    {' '}
+                    {item.location.city}, {item.location.country}{' '}
+                  </Text>{' '}
+                </View>{' '}
                 <View>
                   <Badge>
                     <Text style={{fontWeight: 'bold', fontSize: 9}}>
-                      {item.price} PKR
-                    </Text>
-                  </Badge>
-                </View>
-              </View>
-            </View>
-          </View>
-        </Card>
+                      {' '}
+                      {item.price}
+                      PKR{' '}
+                    </Text>{' '}
+                  </Badge>{' '}
+                </View>{' '}
+              </View>{' '}
+            </View>{' '}
+          </View>{' '}
+        </Card>{' '}
       </TouchableOpacity>
     );
   };
 
   render() {
-    console.log('sparepart: ', this.state.spareParts);
     return (
       <Container>
         <Header
@@ -197,8 +207,8 @@ class Category extends React.Component {
               fontWeight: 'bold',
               color: 'white',
             }}>
-            PARTS
-          </Text>
+            PARTS{' '}
+          </Text>{' '}
           <Text
             style={{
               fontFamily: 'fantasy',
@@ -207,8 +217,8 @@ class Category extends React.Component {
               color: 'red',
               fontWeight: 'bold',
             }}>
-            WHEEL
-          </Text>
+            WHEEL{' '}
+          </Text>{' '}
           <Text
             style={{
               fontFamily: 'fantasy',
@@ -217,32 +227,42 @@ class Category extends React.Component {
               fontWeight: 'bold',
               color: 'white',
             }}>
-            .COM
-          </Text>
-        </Header>
+            .COM{' '}
+          </Text>{' '}
+        </Header>{' '}
         <View style={{flex: 1}}>
+          {' '}
           {/*       <View style={{width: '100%', alignSelf: 'center'}}>
-            <SearchBar />
-          </View> */}
+                            <SearchBar />
+                          </View> */}{' '}
           <SafeAreaView style={{flex: 1}}>
+            {' '}
             {this.state.spareParts.length > 0 ? (
               <React.Fragment>
+                {' '}
                 {/* <FlatList
-                data={this.state.spareParts}
-                extraData
-                keyExtractor={item => item.id.toString()}
-                renderItem={item => this.list(item.item)}
-              /> */}
+                                        data={this.state.spareParts}
+                                        extraData
+                                        keyExtractor={item => item.id.toString()}
+                                        renderItem={item => this.list(item.item)}
+                                      /> */}{' '}
                 <FlatList
                   data={this.state.spareParts}
                   renderItem={item => (
-                    <SingleItem height={200} width={'44.5%'} item={item.item} selectedItemIdUpdateMethod={this.selectedItemIdUpdateMethod} />
+                    <SingleItem
+                      height={200}
+                      width={'44.5%'}
+                      item={item.item}
+                      selectedItemIdUpdateMethod={
+                        this.selectedItemIdUpdateMethod
+                      }
+                    />
                   )}
                   extraData
                   keyExtractor={item => item.id.toString()}
                   numColumns={2}
                   showsHorizontalScrollIndicator={false}
-                />
+                />{' '}
               </React.Fragment>
             ) : (
               <View
@@ -252,12 +272,12 @@ class Category extends React.Component {
                   alignItems: 'center',
                 }}>
                 <Text style={{color: 'white', textAlign: 'center'}}>
-                  No Sparepart found
-                </Text>
+                  No Sparepart found{' '}
+                </Text>{' '}
               </View>
-            )}
-          </SafeAreaView>
-        </View>
+            )}{' '}
+          </SafeAreaView>{' '}
+        </View>{' '}
       </Container>
     );
   }
@@ -276,4 +296,7 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Category);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Category);

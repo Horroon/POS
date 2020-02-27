@@ -96,7 +96,7 @@ class ItemDetail extends React.Component {
   };
 
   componentDidMount() {
-    this.checkLogin()
+    this.checkLogin();
     this.getSingleSparePart();
   }
 
@@ -160,6 +160,7 @@ class ItemDetail extends React.Component {
                     id
                     url
                   }
+                  updatedAt
                 }
               }
             }
@@ -255,6 +256,16 @@ class ItemDetail extends React.Component {
     this.props.navigation.navigate('BuyerItemDetail', {
       item: item,
     });
+  };
+
+  openChatScreen_Method = () => {
+    if (this.state.isLogin) {
+      this.props.navigation.navigate('chatScreen', {
+        user: this.state.singleSparepart.owner,
+      });
+    } else {
+      this.props.loginModalAction(true);
+    }
   };
 
   render() {
@@ -527,11 +538,6 @@ class ItemDetail extends React.Component {
                     <Icon
                       name="ios-arrow-forward"
                       style={{fontSize: 25, color: 'black', paddingTop: 2}}
-                      onPress={() => {
-                        this.props.navigation.navigate('OtherUserProfile', {
-                          id: 12,
-                        });
-                      }}
                     />
                   </Right>
                 </ListItem>
@@ -564,7 +570,7 @@ class ItemDetail extends React.Component {
         </Content>
         <Footer style={{backgroundColor: 'black'}}>
           <FooterTab style={{backgroundColor: 'black'}}>
-            <NativeBaseButton>
+            <NativeBaseButton onPress={this.openChatScreen_Method}>
               <Icon name="ios-chatboxes" />
               <Text>Chat</Text>
             </NativeBaseButton>

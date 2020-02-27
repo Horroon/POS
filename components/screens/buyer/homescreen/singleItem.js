@@ -78,7 +78,7 @@ const SingleItem = props => {
                 {props.item.location.city}
               </Text>
             </View>
-            <View>
+            <View style={{flexShrink:1, flexWrap:'nowrap'}}>
               <Text
                 style={{
                   textAlign: 'right',
@@ -86,7 +86,7 @@ const SingleItem = props => {
                   paddingHorizontal: 4,
                   paddingBottom: 2,
                 }}>
-                Today
+                {new Date(props.item.updatedAt).toDateString()}
               </Text>
             </View>
           </View>

@@ -47,6 +47,7 @@ target 'pos' do
 
   pod 'react-native-geocoder', :path => '../node_modules/react-native-geocoder'
 
+
   target 'posTests' do
     inherit! :search_paths
     # Pods for testing

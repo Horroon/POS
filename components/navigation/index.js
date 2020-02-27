@@ -19,6 +19,7 @@ import SellerOrderList from '../screens/seller/Home_screen/orderlist';
 import SellerOrderDetail from '../screens/seller/Home_screen/orderDetail';
 import OtherUserProfile from '../screens/buyer/otheruserprofile/index';
 import UserAdds from '../screens/buyer/userAdds/index';
+import Chat_Screen from '../screens/buyer/chat/index';
 
 const HomeScreenRouter = createStackNavigator(
   {
@@ -37,6 +38,7 @@ const HomeScreenRouter = createStackNavigator(
     SellerOrderDetail: {screen: SellerOrderDetail},
     OtherUserProfile: {screen: OtherUserProfile},
     UserAdds: {screen: UserAdds},
+    chatScreen: {screen: Chat_Screen},
   },
   {
     initialRouteName: 'BuyerHomeScreen',
