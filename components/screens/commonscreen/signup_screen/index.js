@@ -223,7 +223,6 @@ export default class SignUpComponent extends Component {
       <View style={styles.mainContainer}>
         <ScrollView>
           <ImageBackground
-            source={SignupScreenBackground}
             style={{width: '100%', height: '100%'}}>
             <View style={styles.con1}>
               <View style={{height: 100}}>
@@ -236,7 +235,7 @@ export default class SignUpComponent extends Component {
             <View style={styles.con2}>
               <View style={styles.con2Con1}>
                 <IconInputFiled
-                  style={{color: 'white', fontSize: 16}}
+                  style={{fontSize: 16}}
                   placeholder="First Name"
                   changeText={e => this.setState({fname: e})}
                   Image={'person'}
@@ -244,7 +243,7 @@ export default class SignUpComponent extends Component {
                 />
 
                 <IconInputFiled
-                  style={{color: 'white', fontSize: 16}}
+                  style={{fontSize: 16}}
                   placeholder="Last Name"
                   changeText={e => this.setState({lname: e})}
                   Image={'person'}
@@ -252,7 +251,7 @@ export default class SignUpComponent extends Component {
                 />
 
                 <IconInputFiled
-                  style={{color: 'white', fontSize: 16}}
+                  style={{fontSize: 16}}
                   placeholder="Email Address"
                   changeText={e => this.setState({email: e})}
                   Image={'mail'}
@@ -260,7 +259,7 @@ export default class SignUpComponent extends Component {
                 />
 
                 <IconInputFiled
-                  style={{color: 'white', fontSize: 16}}
+                  style={{fontSize: 16}}
                   placeholder="Password"
                   changeText={e => this.setState({password: e})}
                   Image={'ios-key'}
@@ -269,7 +268,7 @@ export default class SignUpComponent extends Component {
                 />
 
                 <IconInputFiled
-                  style={{color: 'white', fontSize: 16}}
+                  style={{fontSize: 16}}
                   placeholder="repassword"
                   changeText={e => this.setState({repassword: e})}
                   Image={'ios-key'}
@@ -278,7 +277,7 @@ export default class SignUpComponent extends Component {
                 />
 
                 <IconInputFiled
-                  style={{color: 'white', fontSize: 16}}
+                  style={{fontSize: 16}}
                   placeholder="Mobile"
                   changeText={e => this.setState({mobile: e})}
                   Image={'call'}
@@ -286,21 +285,21 @@ export default class SignUpComponent extends Component {
                 />
 
                 <IconInputFiled
-                  style={{color: 'white', fontSize: 16}}
+                  style={{fontSize: 16}}
                   placeholder="address"
                   changeText={e => this.setState({address: e})}
                   iconStyle={{color: 'red'}}
                 />
 
                 <IconInputFiled
-                  style={{color: 'white', fontSize: 16}}
+                  style={{fontSize: 16}}
                   placeholder="city"
                   changeText={e => this.setState({city: e})}
                   iconStyle={{color: 'red'}}
                 />
 
                 <IconInputFiled
-                  style={{color: 'white', fontSize: 16}}
+                  style={{fontSize: 16}}
                   placeholder="country"
                   changeText={e => this.setState({country: e})}
                   iconStyle={{color: 'red'}}
@@ -326,7 +325,7 @@ export default class SignUpComponent extends Component {
                 <Divider
                   style={{width: '45%', borderWidth: 1, borderColor: 'red'}}
                 />
-                <Text style={{marginTop: -10, color: 'white'}}>OR</Text>
+                <Text style={{marginTop: -10}}>OR</Text>
                 <Divider
                   style={{width: '45%', borderWidth: 1, borderColor: 'red'}}
                 />
@@ -338,7 +337,6 @@ export default class SignUpComponent extends Component {
                   style={{
                     textDecorationLine: 'underline',
                     textDecorationColor: 'red',
-                    color: 'white',
                   }}>
                   Already Have An Account
                 </Text>

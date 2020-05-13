@@ -35,9 +35,8 @@ class HomeSideBar extends Component {
     };
   }
 
-  checkLogin = async () => {
-    const token = await AsyncStorage.getItem('token');
-    if (token) {
+  checkLogin = () => {
+    if (this.props.store.BuyerReducer.loginData.token) {
       this.profileData(); //if user login then call profileData method
       this.setState({isLogin: true});
     } else {
@@ -51,7 +50,7 @@ class HomeSideBar extends Component {
 
   UNSAFE_componentWillUpdate(preState) {
     if (preState != this.props) {
-      if (this.props.store.loginData.lgn_Id) {
+      if (this.props.store.BuyerReducer.loginData.lgn_Id) {
         this.profileData();
         return true;
       }
@@ -97,7 +96,6 @@ class HomeSideBar extends Component {
   };
 
   render() {
-    console.log('props: in side bar', this.props);
     return (
       <View
         style={{
@@ -115,7 +113,7 @@ class HomeSideBar extends Component {
               justifyContent: 'center',
             }}
             source={require('../../../../assests/sidebar_background.jpg')}>
-            {this.state.isLogin || this.props.store.loginData.lgn_Id ? (
+            {this.state.isLogin ? (
               <React.Fragment>
                 <View
                   style={{
@@ -165,7 +163,11 @@ class HomeSideBar extends Component {
           <ScrollView
             style={{
               height: height - 250 - 80,
-              display: this.state.isLogin || this.props.store.loginData.lgn_Id ? 'flex' : 'none',
+              display:
+                this.state.isLogin ||
+                this.props.store.BuyerReducer.loginData.lgn_Id
+                  ? 'flex'
+                  : 'none',
             }}>
             {/* profile row end */}
             <TouchableHighlight
@@ -243,4 +245,7 @@ const mapDispatchToProps = dispatch => {
     dispatch,
   );
 };
-export default connect(mapStateToProps, mapDispatchToProps)(HomeSideBar);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(HomeSideBar);

@@ -25,12 +25,6 @@ import {bindActionCreators} from 'redux';
 const ScreenHeight = Math.round(Dimensions.get('screen').height);
 
 class LoginComponent extends Component {
-  //header data
-  static navigationOptions = {
-    title: 'login',
-    header: null,
-  };
-
   constructor(props) {
     super(props);
     this.state = {
@@ -64,21 +58,27 @@ class LoginComponent extends Component {
           fetchPolicy: 'network-only',
         });
 
+        alert('data ' + JSON.stringify(data));
+
         if (loading) {
           this.setState({loader: true});
         }
         if (!loading) {
           this.setState({loader: false});
         }
-        if (data) {
+
+        if (data !== null) {
           showMessage({
             message: 'LOGIN SUCCESSFULLY',
             type: 'success',
           });
 
+          //closing login modal
+          this.props.closeLoginModal(false);
+
           //data for redux store
           let {loginData} = this.props.store;
-          loginData.token = data.login.AuthToken
+          loginData.token = data.login.AuthToken;
           loginData.lgn_email = data.login.email;
           loginData.lgn_Id = data.login.id;
 
@@ -87,8 +87,6 @@ class LoginComponent extends Component {
 
           //store data in Async
           AsyncStorage.setItem('token', data.login.AuthToken);
-          AsyncStorage.setItem('lgn_Id', data.login.id);
-          AsyncStorage.setItem('lgn_email', data.login.email);
 
           if (role == 's') {
             this.props.navigation.navigate('SellerOrderList');
@@ -96,6 +94,9 @@ class LoginComponent extends Component {
           if (role == 'b') {
             this.props.navigation.navigate('BuyerHomeScreen');
           }
+        }
+        if (data == null) {
+          throw new Error('Sorry some thing wrong');
         }
         if (loading) {
           ToastAndroid.showWithGravity(
@@ -105,6 +106,9 @@ class LoginComponent extends Component {
           );
         }
       } catch (e) {
+        alert(e);
+        //closing login modal
+        this.props.closeLoginModal(false);
         if (e.graphQLErrors[0]) {
           this.setState({loader: false});
           showMessage({
@@ -119,6 +123,13 @@ class LoginComponent extends Component {
             message: 'Network Problem!',
             type: 'danger',
           });
+        } else {
+          this.setState({loader: false});
+          console.log('error ', e);
+          showMessage({
+            message: e,
+            type: 'danger',
+          });
         }
       }
     } else {
@@ -130,12 +141,11 @@ class LoginComponent extends Component {
   };
   //render screen
   render() {
-    const {navigate} = this.props.navigation;
+    console.log('navigation is ', this.props.navigation);
     return (
       <Container>
         <Content style={{backgroundColor: 'transparent'}}>
           <ImageBackground
-            source={LoginScreenBackgroundImage}
             style={{width: '100%', height: ScreenHeight - 24}}
             resizeMode={'cover'}>
             <View style={styles.con1}>
@@ -150,14 +160,15 @@ class LoginComponent extends Component {
               <View style={styles.con2Con1}>
                 <IconInputFiled
                   placeholder="Email Address"
-                  style={{color: 'white', fontSize: 16}}
+                  place
+                  style={{fontSize: 16}}
                   changeText={e => this.setState({email: e})}
                   Image={'mail'}
                   iconStyle={{color: 'red'}}
                 />
                 <IconInputFiled
                   placeholder="Password"
-                  style={{color: 'white', fontSize: 16}}
+                  style={{fontSize: 16}}
                   changeText={e => this.setState({password: e})}
                   Image={'ios-key'}
                   password={true}
@@ -184,15 +195,22 @@ class LoginComponent extends Component {
                 <Divider
                   style={{width: '45%', borderWidth: 1, borderColor: 'red'}}
                 />
-                <Text style={{marginTop: -10, color: 'white'}}>OR</Text>
+                <Text style={{marginTop: -10, color: 'white'}}> OR </Text>
                 <Divider
                   style={{width: '45%', borderWidth: 1, borderColor: 'red'}}
                 />
               </View>
               <TouchableOpacity
                 style={{alignItems: 'center'}}
-                onPress={() => navigate('SignUp')}>
-                <Text style={{textDecorationLine: 'underline', color: 'white'}}>
+                onPress={() => {
+                  console.log(
+                    'navigation in login modal: ',
+                    this.props.navigation,
+                  );
+                  this.props.closeLoginModal();
+                  this.props.navigation.navigate('SignUp');
+                }}>
+                <Text style={{textDecorationLine: 'underline', color: 'red'}}>
                   Create New Account
                 </Text>
               </TouchableOpacity>

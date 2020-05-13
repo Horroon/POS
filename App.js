@@ -6,7 +6,7 @@
  * @flow
  */
 
-import React from 'react';
+import React, {useState} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -27,16 +27,19 @@ import {
 import Routes from './components/navigation/index';
 import FlashMessage from 'react-native-flash-message';
 import {Provider} from 'react-redux';
-import {store} from './components/redux/store';
-import LoginModal from './components/screens/commonscreen/loginModal/index';
+import {store, per_store} from './components/redux/store';
+//import LoginModal from './components/screens/commonscreen/loginModal/index';
+import {PersistGate} from 'redux-persist/integration/react';
 
 const App = () => {
   return (
     <View style={{flex: 1}}>
       <ApolloProvider client={Client}>
         <Provider store={store}>
-          <Routes />
-          <LoginModal />
+          <PersistGate loading={null} persistor={per_store}>
+            <Routes />
+            {/* <LoginModal /> */}
+          </PersistGate>
         </Provider>
         <FlashMessage position="top" duration={3000} />
       </ApolloProvider>

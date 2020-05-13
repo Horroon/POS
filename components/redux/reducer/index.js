@@ -1,6 +1,7 @@
 import InitialState from './InitialState';
 
-const Reducer = (state = InitialState, action) => {
+export const BuyerReducer = (state = InitialState, action) => {
+  action.type === 'loginData' && console.log('action called ', action.payload);
   switch (action.type) {
     case 'spareparts_search':
       return {...state, spareparts_search: action.payload};
@@ -16,5 +17,3 @@ const Reducer = (state = InitialState, action) => {
       return {...state};
   }
 };
-
-export default Reducer;

@@ -8,11 +8,14 @@ import {
   Badge,
   Icon,
 } from 'native-base';
-import {ImageBackground, TouchableHighlight, TouchableOpacity} from 'react-native';
+import {
+  ImageBackground,
+  TouchableHighlight,
+  TouchableOpacity,
+} from 'react-native';
 import {mylink} from '../../apollo_config/config';
 
 const SingleItem = props => {
-  console.log('props :', props);
   return (
     <TouchableOpacity
       style={{
@@ -21,12 +24,14 @@ const SingleItem = props => {
         margin: 10,
         borderWidth: 1,
         borderColor: 'gray',
-        backgroundColor:'transparent',
+        backgroundColor: props.style
+          ? props.style.backgroundColor
+          : 'transparent',
       }}
       onPress={() => props.selectedItemIdUpdateMethod(props.item)}>
       <View>
         <ImageBackground
-          source={{uri: mylink + props.item.pictures[0].url}}
+          source={props.item.pictures[0].url} //{{uri: mylink + props.item.pictures[0].url}}
           style={{height: 120, width: '100%'}}
           fadeDuration={400}
           resizeMode={'stretch'}>
@@ -49,7 +54,7 @@ const SingleItem = props => {
                     alignItems: 'flex-end',
                     paddingHorizontal: 2,
                   }}>
-                  <Icon name="ios-heart-empty" style={{color:'red'}} />
+                  <Icon name="ios-heart-empty" style={{color: 'red'}} />
                 </View>
               </View>
             </View>
@@ -78,7 +83,7 @@ const SingleItem = props => {
                 {props.item.location.city}
               </Text>
             </View>
-            <View style={{flexShrink:1, flexWrap:'nowrap'}}>
+            <View style={{flexShrink: 1, flexWrap: 'nowrap'}}>
               <Text
                 style={{
                   textAlign: 'right',

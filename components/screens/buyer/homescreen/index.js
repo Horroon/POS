@@ -22,6 +22,7 @@ import {showMessage} from 'react-native-flash-message';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import Footer from './footer';
+import LoginModal from '../../commonscreen/loginModal/index';
 
 GEO_CODE.fallbackToGoogle('AIzaSyBflho0fOH_r3KR2uE4ubqCpc_6nHOTuHk');
 
@@ -183,7 +184,8 @@ class HomeScreen extends React.Component {
               }}>
               <FindPartsForm navigation={this.props} />
             </View>
-            {this.state.currentCitySpareparts.length > 0 && (
+            {this.state.currentCitySpareparts.length > 0 &&
+            this.state.currentCitySpareparts[0].name ? (
               <SafeAreaView
                 style={{
                   paddingTop: 10,
@@ -217,7 +219,10 @@ class HomeScreen extends React.Component {
                   style={{width: '100%'}}
                 />
               </SafeAreaView>
+            ) : (
+              <Text></Text>
             )}
+            <LoginModal {...this.props} />
           </View>
         </Content>
 

@@ -36,9 +36,12 @@ function chat_input(props) {
           <TouchableOpacity
             onPress={() => {
               if (message) {
-                const {chats} = props.state;
-                chats.push(message);
-                props.setState({chats: chats});
+                let {newChat} = props.state;
+                newChat = message;
+                props.setState({type: 'newChat', payload: newChat});
+                //setTimeout(() => {
+                  props.sendChatOnServer();
+              //  }, 500);
                 setMessage('');
               }
             }}>

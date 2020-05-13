@@ -11,6 +11,8 @@ import {
   Badge,
   Icon,
   Right,
+  Footer,
+  FooterTab,
 } from 'native-base';
 import {Button} from 'react-native-elements';
 import {
@@ -32,23 +34,97 @@ import LoaderModal from '../../commonscreen/loadingmodel/index';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import AddSpareparts_list from '../../../redux/actions/addSpareparts_list';
+import SingleItem from '../../buyer/homescreen/singleItem';
 
-const Height = Dimensions.get('window').height - 80;
+const Height = Dimensions.get('window').height - 120;
 
 class OrderList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      sparepartslist: [],
+      sparepartslist: [
+        {
+          id: 1,
+          name: 'Testing',
+          pictures: [{url: spareImage1}],
+          address: 'Thamewali',
+          price: 123,
+          location: {
+            country: 'Pakistan',
+            city: 'Mianwali',
+          },
+          updatedAt: new Date(),
+        },
+        {
+          id: 2,
+          name: 'Testing',
+          pictures: [{url: spareImage1}],
+          address: 'Thamewali',
+          price: 123,
+          location: {
+            country: 'Pakistan',
+            city: 'Mianwali',
+          },
+          updatedAt: new Date(),
+        },
+        {
+          id: 3,
+          name: 'Testing',
+          pictures: [{url: spareImage1}],
+          address: 'Thamewali',
+          price: 123,
+          location: {
+            country: 'Pakistan',
+            city: 'Mianwali',
+          },
+          updatedAt: new Date(),
+        },
+        {
+          id: 4,
+          name: 'Testing',
+          pictures: [{url: spareImage1}],
+          address: 'Thamewali',
+          price: 123,
+          location: {
+            country: 'Pakistan',
+            city: 'Mianwali',
+          },
+          updatedAt: new Date(),
+        },
+        {
+          id: 5,
+          name: 'Testing',
+          pictures: [{url: spareImage1}],
+          address: 'Thamewali',
+          price: 123,
+          location: {
+            country: 'Pakistan',
+            city: 'Mianwali',
+          },
+          updatedAt: new Date(),
+        },
+        {
+          id: 6,
+          name: 'Testing',
+          pictures: [{url: spareImage1}],
+          address: 'Thamewali',
+          price: 123,
+          location: {
+            country: 'Pakistan',
+            city: 'Mianwali',
+          },
+          updatedAt: new Date(),
+        },
+      ],
       modalVisible: false,
     };
   }
 
   componentDidMount() {
-    this.findSellerSpareparts();
+    //this.findSellerSpareparts();
   }
 
-  listItem = item => {
+  /*  listItem = item => {
     console.log('item: ', item);
     return (
       <TouchableOpacity
@@ -66,7 +142,7 @@ class OrderList extends Component {
                   uri:
                     item.pictures.length > 0
                       ? mylink + item.pictures[0].url
-                      : '',
+                      : item.pictures[0].url,
                 }}
                 style={{height: 100, width: '100%'}}
               />
@@ -122,7 +198,7 @@ class OrderList extends Component {
         </Card>
       </TouchableOpacity>
     );
-  };
+  }; */
 
   //findSellerSpareparts method start
   findSellerSpareparts = async () => {
@@ -176,7 +252,7 @@ class OrderList extends Component {
   };
   //findSellerSpareparts method ended
   render() {
-    console.log('store is in order list ', this.props.store)
+    console.log('store is in order list ', this.state);
     return (
       <Container>
         <Header
@@ -229,16 +305,6 @@ class OrderList extends Component {
                 justifyContent: 'space-around',
                 flexDirection: 'row',
               }}>
-              <Button
-                title="+"
-                buttonStyle={{
-                  width: 40,
-                  height: 40,
-                  borderRadius: 20,
-                  backgroundColor: 'red',
-                }}
-                onPress={() => this.props.navigation.navigate('AddProduct')}
-              />
               <View style={{alignItems: 'center'}}>
                 <Text
                   style={{fontSize: 20, fontWeight: 'bold', color: 'white'}}>
@@ -246,21 +312,30 @@ class OrderList extends Component {
                 </Text>
               </View>
             </View>
+            {/* 
             <FlatList
-              data={this.props.store.sparepartslist}
+              data={this.state.sparepartslist} //{this.props.store.sparepartslist}
               renderItem={item => this.listItem(item.item)}
               keyExtractor={(obj, index) => index.toString()}
               extraData
-            />
-          </View>
+            /> */}
 
-          <View
-            style={{
-              justifyContent: 'center',
-              alignItems: 'center',
-              height: 80,
-            }}>
-            <View style={{width: '100%'}}></View>
+            <FlatList
+              data={this.state.sparepartslist}
+              renderItem={item => (
+                <SingleItem
+                  style={{backgroundColor: 'white'}}
+                  height={200}
+                  width={'44.5%'}
+                  item={item.item}
+                  //selectedItemIdUpdateMethod={this.selectedItemIdUpdateMethod}
+                />
+              )}
+              extraData
+              keyExtractor={item => item.id.toString()}
+              numColumns={2}
+              showsHorizontalScrollIndicator={false}
+            />
           </View>
           <LoaderModal
             state={this.state}
@@ -269,6 +344,27 @@ class OrderList extends Component {
             }}
           />
         </Content>
+        <Footer>
+          <FooterTab style={{backgroundColor: 'black'}}>
+            <TouchableOpacity
+              style={{
+                borderWidth: 1,
+                borderColor: 'rgba(0,0,0,0.2)',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: 70,
+                position: 'absolute',
+                bottom: 10,
+                right: 10,
+                height: 70,
+                backgroundColor: 'red',
+                borderRadius: 100,
+              }}
+              onPress={() => this.props.navigation.navigate('AddProduct')}>
+              <Icon name="add" size={30} style={{color: 'white'}} />
+            </TouchableOpacity>
+          </FooterTab>
+        </Footer>
       </Container>
     );
   }
@@ -287,4 +383,7 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Drawer(OrderList, Sidebar));
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Drawer(OrderList, Sidebar));

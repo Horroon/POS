@@ -17,7 +17,7 @@ const IconInputFiled = props => {
         <TextInput
           style={{flex: 1, ...props.style}}
           placeholder={props.placeholder}
-          placeholderTextColor={'white'}
+          placeholderTextColor={'black'}
           secureTextEntry={props.password ? props.password : false}
           // underlineColorAndroid="transparent"
           onChangeText={e => props.changeText(e)}

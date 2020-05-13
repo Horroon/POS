@@ -34,27 +34,29 @@ class FooterClass extends Component {
   };
 
   explore_Page = () => {
-    this.props.navigation.navigate('BuyerHomeScreen');
+    this.props.navigation.navigate('chatScreen');
   };
 
   sell_Item_Page = () => {
-    if (this.state.isLogin) {
-      this.props.navigation.navigate('AddProduct');
-    } else {
+    //if (this.props.store.BuyerReducer.token) {
+      this.props.navigation.navigate('SellerOrderList');//AddProduct
+    /* } else {
       this.props.loginModalAction(true);
-    }
+    } */
   };
 
   myAdds_Page = () => {
-    if (this.state.isLogin) {
-      this.props.navigation.navigate('UserAdds', {p_id: this.state.user_id});
+    if (this.props.store.BuyerReducer.token) {
+      this.props.navigation.navigate('UserAdds', {
+        p_id: this.props.store.BuyerReducer.lgn_Id,
+      });
     } else {
       this.props.loginModalAction(true);
     }
   };
 
   Account_Page = () => {
-    if (this.state.isLogin) {
+    if (this.props.store.BuyerReducer.token) {
       this.props.navigation.navigate('Profile');
     } else {
       this.props.loginModalAction(true);
@@ -102,4 +104,7 @@ const mapDispatchToProps = dispatch => {
   );
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(FooterClass);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(FooterClass);
