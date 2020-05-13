@@ -51,7 +51,7 @@ class OrderList extends Component {
           price: 123,
           location: {
             country: 'Pakistan',
-            city: 'Mianwali',
+            city: 'Talagang',
           },
           updatedAt: new Date(),
         },
